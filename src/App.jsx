@@ -1,9 +1,7 @@
-import {Usercard} from "./Greeting";
+import Layout from "./blogpost.jsx";
 
 function App() {
-  return (
-    <Usercard />
-  );
+  return <Layout />;
 }
 
 export default App;
