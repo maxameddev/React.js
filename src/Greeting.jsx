@@ -1,12 +1,14 @@
- 
-  export const Usercard = ()=>{
-    return (
-      <div>
-        <h1>Mohamed</h1>
-        <p>Mohamed@example.com</p>
-      </div>
-    )
-  }
+function Greeting({ count }) {
+  return (
+    <div>
+      <h2>Count: {count}</h2>
+      {count === 0 ? (
+        <p>Start clicking the button 👇</p>
+      ) : (
+        <p>You clicked {count} times 🚀</p>
+      )}
+    </div>
+  );
+}
 
-
-//  export default Greeting;
+export default Greeting;
