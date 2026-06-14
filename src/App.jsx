@@ -1,20 +1,9 @@
-import { useState } from "react";
-import Toggle from "./Toggle";
+import Greeting from "./Greeting";
 
 function App() {
-  const [isOn, setIsOn] = useState(false);
-
-  const toggleButton = () => {
-    setIsOn(!isOn);
-  };
-
   return (
     <div>
-      <button onClick={toggleButton}>
-        {isOn ? "Turn Off" : "Turn On"}
-      </button>
-
-      <Toggle isOn={isOn} />
+      <Greeting />
     </div>
   );
 }
