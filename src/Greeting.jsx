@@ -1,110 +1,63 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function Greeting() {
-  const [products, setProducts] = useState([]);
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
+  const [inputTime, setInputTime] = useState(30);
+  const [timeLeft, setTimeLeft] = useState(30);
+  const [isRunning, setIsRunning] = useState(false);
 
-  const addProduct = () => {
-    if (!name || !price) return;
+  useEffect(() => {
+    let timer;
 
-    const newProduct = {
-      id: Date.now(),
-      name,
-      price: Number(price),
-      quantity: 1,
-    };
+    if (isRunning && timeLeft > 0) {
+      timer = setInterval(() => {
+        setTimeLeft((prev) => prev - 1);
+      }, 1000);
+    }
 
-    setProducts([...products, newProduct]);
-    setName("");
-    setPrice("");
+    if (timeLeft === 0) {
+      setIsRunning(false);
+    }
+
+    return () => clearInterval(timer);
+  }, [isRunning, timeLeft]);
+
+  const handleStart = () => {
+    setIsRunning(true);
   };
 
-  const increaseQty = (id) => {
-    setProducts(
-      products.map((item) =>
-        item.id === id
-          ? { ...item, quantity: item.quantity + 1 }
-          : item
-      )
-    );
+  const handleStop = () => {
+    setIsRunning(false);
   };
 
-  const decreaseQty = (id) => {
-    setProducts(
-      products.map((item) =>
-        item.id === id && item.quantity > 1
-          ? { ...item, quantity: item.quantity - 1 }
-          : item
-      )
-    );
+  const handleReset = () => {
+    setIsRunning(false);
+    setTimeLeft(inputTime);
   };
 
-  const removeProduct = (id) => {
-    setProducts(products.filter((item) => item.id !== id));
+  const handleChange = (e) => {
+    const value = Number(e.target.value);
+    setInputTime(value);
+    setTimeLeft(value);
   };
-
-  const totalPrice = products.reduce(
-    (total, item) => total + item.price * item.quantity,
-    0
-  );
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Simple Shopping Cart</h1>
+    <div>
+      <h1>Countdown Timer</h1>
 
-      <h2>Add a Product</h2>
+      <label>
+        Set Time (seconds):
+        <input
+          type="number"
+          value={inputTime}
+          onChange={handleChange}
+        />
+      </label>
 
-      <input
-        type="text"
-        placeholder="Product Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      />
+      <p>Time Left: {timeLeft} seconds</p>
 
-      <input
-        type="number"
-        placeholder="Price"
-        value={price}
-        onChange={(e) => setPrice(e.target.value)}
-      />
-
-      <button onClick={addProduct}>Add to Cart</button>
-
-      <h2>Products in Cart</h2>
-
-      {products.length === 0 ? (
-        <p>Cart is empty</p>
-      ) : (
-        <ul>
-          {products.map((item) => (
-            <li key={item.id}>
-              <strong>
-                {item.name} - ${item.price.toFixed(2)}
-              </strong>
-
-              <div>
-                Quantity:
-                <button onClick={() => decreaseQty(item.id)}>
-                  -
-                </button>
-
-                {item.quantity}
-
-                <button onClick={() => increaseQty(item.id)}>
-                  +
-                </button>
-              </div>
-
-              <button onClick={() => removeProduct(item.id)}>
-                Remove
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
-
-      <h2>Total Price: ${totalPrice.toFixed(2)}</h2>
+      <button onClick={handleStart}>Start</button>
+      <button onClick={handleStop}>Stop</button>
+      <button onClick={handleReset}>Reset</button>
     </div>
   );
 }
