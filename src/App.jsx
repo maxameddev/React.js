@@ -1,9 +1,9 @@
-import Greeting from "./Greeting";
+import GithubSearch from "./Greeting";
 
 function App() {
   return (
     <div>
-      <Greeting />
+      <GithubSearch />
     </div>
   );
 }
